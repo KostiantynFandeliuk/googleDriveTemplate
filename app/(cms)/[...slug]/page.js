@@ -1,54 +1,31 @@
-"use client";
+import chalk from "chalk";
+import { parse } from "node-html-parser";
 
-import { useEffect, useState } from "react";
-import { configs } from "@/app/files";
-import { usePathname } from "next/navigation";
+import { getGoogleDrivePage } from "@/app/services/google.api";
 
-// import chalk from "chalk";
-// import { parse } from "node-html-parser";
+const { bgGreenBright } = chalk;
 
-// import { getGoogleDrivePage } from "@/app/services/google.api";
+function removeStyles(htmlContent) {
+  const root = parse(htmlContent);
 
-// const { bgGreenBright } = chalk;
+  const allElements = root.querySelectorAll("*");
+  allElements.forEach((element) => {
+    element.removeAttribute("style");
+  });
+  return root.toString();
+}
 
-// function removeStyles(htmlContent) {
-//   const root = parse(htmlContent);
+export default async function Page(props) {
+  console.log(bgGreenBright("PATH"), props);
 
-//   const allElements = root.querySelectorAll("*");
-//   allElements.forEach((element) => {
-//     element.removeAttribute("style");
-//   });
-//   return root.toString();
-// }
+  const htmlContent = await getGoogleDrivePage(props.params.slug.join("/"));
 
-export default function Page(props) {
-  const pathname = usePathname();
-  const [htmlContent, setHtmlContent] = useState("");
-
-  useEffect(() => {
-    const gettest = async () => {
-      const response = await fetch("/test/a", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      const data = await response?.json();
-
-      const importedModule = await import(
-        `@/app/files/pages/${pathname.split("/").join("")}`
-      );
-
-      setHtmlContent(importedModule.content);
-    };
-
-    gettest();
-  }, [pathname]);
+  // console.log("foldersList", foldersList);
+  const root = 1 ? removeStyles(htmlContent) : htmlContent;
 
   return (
     <main>
-      {/* {content} */}
-      <div dangerouslySetInnerHTML={{ __html: htmlContent }} />
+      <div dangerouslySetInnerHTML={{ __html: root.toString() }} />
     </main>
   );
 }
