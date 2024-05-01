@@ -73,24 +73,7 @@ async function exportGoogleDocAsText(fileId) {
   }
 }
 
-export async function watchChanges() {
-  const auth = await getAuthenticatedClient();
-  const drive = google.drive({ version: "v3", auth });
-
-  const response = await drive.files.watch({
-    fileId: process.env.A_ID,
-    requestBody: {
-      kind: "api#channel",
-      id: "bce8-88-198-51-246_unique-id-bce8-88-198-51-246",
-      type: "web_hook",
-      address: "https://bce8-88-198-51-246.ngrok-free.app/test/a",
-    },
-  });
-
-  console.log(bgBlue("GOOGLE"), response.data);
-}
-
-async function getGoogleDrivePage(pathPage) {
+export async function getGoogleDrivePage(pathPage) {
   const test = await getGoogleDriveFolders();
   // console.log(bgGreen("getGoogleDriveFolders"), test);
   const files = await getGoogleDriveFolderFiles(test.id);
@@ -108,10 +91,3 @@ async function getGoogleDrivePage(pathPage) {
     ? await exportGoogleDocAsText(currentPage.id)
     : "No content";
 }
-
-export {
-  getGoogleDrivePage,
-  getGoogleDriveFolderFiles,
-  getGoogleDriveFolders,
-  exportGoogleDocAsText,
-};

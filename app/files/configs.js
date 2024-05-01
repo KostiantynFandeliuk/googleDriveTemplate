@@ -1,1 +1,0 @@
-export const configs = [{"mimeType":"application/vnd.google-apps.folder","parents":["1vjUwrPiRHJ8RRP9KHiYBpEqMw0M1TLFV"],"id":"1Q4g2hB4yRc5BEdHD1H84bpD2PRhkWMjm","name":"events","trashed":false}]
